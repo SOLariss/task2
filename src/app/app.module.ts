@@ -19,7 +19,7 @@ import { AppComponent } from './app.component';
     CommonModule,
     BrowserModule
   ],
-  providers: [],
+  providers: [CarouselComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

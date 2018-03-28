@@ -1,31 +1,37 @@
-import { Component, Input, TemplateRef } from '@angular/core';
+import { Component, Input, TemplateRef, OnInit, OnDestroy, HostBinding } from '@angular/core';
+import {CarouselComponent} from './carousel-component';
 
 @Component({
-    selector: 'slide',
-    // <div *ngIf="!isTemplate(); else tpl">{{ content }}</div>
-    template: `<div class="carousel-item {{isActive()}}">
+  selector: "slide",
+  template: `<div class="carousel-item" [class.active]="active">
         <img class="d-block w-100" src={{image}}>
-        <h1>{{title}}</h1>
-        <ng-template #tpl>
-            <ng-container *ngTemplateOutlet="content"></ng-container>
-        </ng-template>
+        <div class="carousel-caption d-none d-md-block">
+            <h3>{{title}}</h3>
+            <div *ngIf="!isTemplate(); else tpl">{{ content }}</div>
+            <ng-template #tpl>
+                <ng-container *ngTemplateOutlet="content"></ng-container>
+            </ng-template>            
+        </div>
     </div>`
 })
-export class SlideComponent {
-    @Input() content: string | TemplateRef<any>;
-    @Input() image: string;
-    @Input() title: '';
-    private active = true;  
-    isTemplate() {
-        return this.content instanceof TemplateRef;
-    } 
-    isActive() {
-        if (this.active) {
-            return "active";
-        }
-        return "";
-    }
-    setActive(isActive){
-        this.active = isActive;
-    }
+export class SlideComponent implements OnInit, OnDestroy {
+  @Input() content: string | TemplateRef<any>;
+  @Input() image: string;
+  @Input() title: string;
+  @HostBinding('class.active') active :boolean = false;
+  isTemplate() {
+    return this.content instanceof TemplateRef;
+  }  
+  setActive(isActive) {
+    this.active = isActive;
+  }
+  constructor(private carousel: CarouselComponent) {
+  }
+  ngOnInit(): void {    
+    this.carousel.addSlide(this);
+  }
+  ngOnDestroy(): void {
+    this.carousel.removeSlide(this);
+  }  
+  
 }
