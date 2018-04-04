@@ -3,16 +3,7 @@ import {CarouselComponent} from './carousel-component';
 
 @Component({
   selector: "slide",
-  template: `<div class="carousel-item" [class.active]="active">
-        <img class="d-block w-100" src={{image}}>
-        <div class="carousel-caption d-none d-md-block">
-            <h3>{{title}}</h3>
-            <div *ngIf="!isTemplate(); else tpl">{{ content }}</div>
-            <ng-template #tpl>
-                <ng-container *ngTemplateOutlet="content"></ng-container>
-            </ng-template>            
-        </div>
-    </div>`
+  templateUrl: "./slide-component.html"
 })
 export class SlideComponent implements OnInit, OnDestroy {
   @Input() content: string | TemplateRef<any>;
